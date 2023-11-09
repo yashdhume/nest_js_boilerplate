@@ -1,0 +1,6 @@
+export enum UserRole {
+  PUBLIC = 0x00000001,
+  SETUP = 0x00000002,
+  USER = 0x00000003,
+  ADMIN = 0x00000004,
+}
