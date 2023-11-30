@@ -16,6 +16,7 @@ export class CreateAddressDTO {
   city!: string;
 
   @ApiProperty({ example: 'Meadowvale Village', description: 'The district' })
+  @IsOptional()
   @IsString()
   district?: string;
 

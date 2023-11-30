@@ -1,7 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-firebase-jwt';
-import { Reflector } from '@nestjs/core';
 import { UserService } from '@server/user/user/user.service';
 import { FirebaseAuthService } from '@server/firebase/firebase-auth.service';
 import { UserEntity } from '@server/user/user/user.entity';
@@ -13,7 +12,6 @@ export class FirebaseAuthStrategy extends PassportStrategy(
   AuthStrategy.FIREBASE,
 ) {
   constructor(
-    private readonly reflector: Reflector,
     private readonly userService: UserService,
     private readonly firebaseAuthService: FirebaseAuthService,
   ) {
