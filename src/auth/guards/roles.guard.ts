@@ -20,7 +20,6 @@ export class RolesGuard implements CanActivate {
     );
 
     if (isPublic) return true;
-    if (roles.length === 1 && roles[0] === UserRole.SETUP) return true;
 
     return roles
       .map(role => context.switchToHttp().getRequest().user.role === role)
