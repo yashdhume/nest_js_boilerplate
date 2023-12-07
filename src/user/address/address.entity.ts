@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@server/common/base/base.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '@server/user/user/user.entity';
 
 @Entity('address')
@@ -25,6 +25,7 @@ export class AddressEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'postal_code', nullable: true })
   postalCode?: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => UserEntity, user => user.address)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;

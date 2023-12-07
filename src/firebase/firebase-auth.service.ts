@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as Firebase from 'firebase-admin';
 import { FirebaseService } from '@server/firebase/firebase.service';
 import { Strings } from '@server/common/strings';
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 @Injectable()
 export class FirebaseAuthService {
@@ -11,7 +12,7 @@ export class FirebaseAuthService {
     this.firebase = firebaseService.app;
   }
 
-  async validateToken(token: string): Promise<string> {
+  async validateToken(token: string): Promise<DecodedIdToken> {
     try {
       return await this.firebase
         .auth()
@@ -22,7 +23,7 @@ export class FirebaseAuthService {
               'Please log in again to verify your email.',
             );
           }
-          return decodedToken.uid;
+          return decodedToken;
         });
     } catch (error: any) {
       if (error.code === 'auth/user-disabled') {
