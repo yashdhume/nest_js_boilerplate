@@ -32,17 +32,17 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
     let status: HttpStatus;
 
     switch (exception.constructor) {
-      case QueryFailedError: // this is a TypeOrm error
+      case QueryFailedError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         message = (exception as QueryFailedError).message;
         code = (exception as any).code;
         break;
-      case EntityNotFoundError: // this is another TypeOrm error
+      case EntityNotFoundError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         message = (exception as EntityNotFoundError).message;
         code = (exception as any).code;
         break;
-      case CannotCreateEntityIdMapError: // and another
+      case CannotCreateEntityIdMapError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         message = (exception as CannotCreateEntityIdMapError).message;
         code = (exception as any).code;
