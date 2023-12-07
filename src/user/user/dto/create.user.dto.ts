@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender } from '@server/user/enums/gender.enum';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { CreateAddressDTO } from '@server/user/address/dto/create.address.dto';
 import { AddressEntity } from '@server/user/address/address.entity';
 
@@ -30,6 +30,7 @@ export class CreateUserDto {
   dateOfBirth!: Date;
 
   @ApiProperty({ description: 'Male, Female etc. ' })
+  @Transform(({ value }) => ('' + value).toUpperCase())
   @IsEnum(Gender)
   gender!: Gender;
 
