@@ -57,7 +57,7 @@ export function ControllerFactory<
     protected service: ICrudService<T>;
 
     @Get(':id')
-    @RolesAllowed(UserRole.ADMIN)
+    @RolesAllowed(UserRole.USER)
     @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
     findOne(@Param() params: IDDto): Promise<T> {
       return this.service.findOne(params.id);
@@ -81,7 +81,7 @@ export function ControllerFactory<
     }
 
     @Put(':id')
-    @RolesAllowed(UserRole.USER)
+    @RolesAllowed(UserRole.ADMIN)
     @UsePipes(updatePipe)
     @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
     @ApiBody({ type: updateDto })
