@@ -1,6 +1,7 @@
 export default () => ({
   port: parseInt(process.env.PORT),
   url: process.env.URL,
+  allowAdmin: process.env.ALLOW_ADMIN.toLowerCase() == 'true',
   firebaseService: {
     projectId: process.env.FIREBASE_PROJECT_ID,
     privateKey: process.env.FIREBASE_PRIVATE_KEY,
