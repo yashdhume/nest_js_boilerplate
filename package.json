@@ -21,7 +21,9 @@
     "db:sync": "yarn node  -r ./tsconfig-paths-bootstrap.js ./node_modules/typeorm/cli.js -d dist/db/typeorm.datasource.js schema:sync",
     "db:drop": "yarn node  -r ./tsconfig-paths-bootstrap.js ./node_modules/typeorm/cli.js -d dist/db/typeorm.datasource.js schema:drop",
     "db:migration:show": "typeorm migration:show -d dist/db/typeorm.datasource.js ",
-    "db:migration:run": "typeorm migration:run -d dist/db/typeorm.datasource.js "
+    "db:migration:run": "typeorm migration:run -d dist/db/typeorm.datasource.js ",
+    "db:migration:revert": "typeorm migration:revert -d dist/db/typeorm.datasource.js ",
+    "db:drop:migrate": "yarn db:drop && yarn db:migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

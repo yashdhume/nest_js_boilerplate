@@ -8,6 +8,7 @@ import {
   Query,
   Type,
   UseFilters,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { AbstractValidationPipe } from '@server/common/base/abstract-validation.pipe';
@@ -15,12 +16,23 @@ import { ICrudController } from '@server/common/base/interfaces/crud.interface.c
 import { IDDto } from '@server/common/base/ID.dto';
 import { ICrudService } from '@server/common/base/interfaces/crud.interface.service';
 import { DeepPartial } from 'typeorm';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 import { BaseQueryDto } from '@server/common/base/interfaces/base.query.dto';
 import { TypeOrmExceptionFilter } from '@server/common/exception/typeorm.exception';
-import { RestApiExceptionFilter } from '@server/common/exception/validation.exception';
+import {
+  RestApiExceptionFilter,
+  ValidationException,
+} from '@server/common/exception/validation.exception';
 import { RolesAllowed } from '@server/auth/decorators/roles.decorator';
 import { UserRole } from '@server/auth/enums/user-role.enum';
+import { FirebaseAuthGuard } from '@server/auth/guards/firebase-auth.guard';
+import { RolesGuard } from '@server/auth/guards/roles.guard';
 
 type ClassType<T> = new (...args: any[]) => T;
 
@@ -51,47 +63,47 @@ export function ControllerFactory<
     { query: BaseQueryDto },
   );
   @ApiBearerAuth()
+  @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @ApiBadRequestResponse({ type: ValidationException })
+  @ApiUnprocessableEntityResponse({ type: TypeOrmExceptionFilter })
+  @ApiUnauthorizedResponse()
   class CrudController<T, C extends DeepPartial<T>, U extends DeepPartial<T>>
     implements ICrudController<T, C, U>
   {
     protected service: ICrudService<T>;
 
     @Get(':id')
-    @RolesAllowed(UserRole.USER)
-    @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
+    @RolesAllowed(UserRole.ADMIN)
     findOne(@Param() params: IDDto): Promise<T> {
       return this.service.findOne(params.id);
     }
 
     @Get()
-    @RolesAllowed(UserRole.ADMIN)
     @UsePipes(queryPipe)
-    @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
+    @RolesAllowed(UserRole.ADMIN)
     find(@Query() query: BaseQueryDto): Promise<T[]> {
       return this.service.find(query);
     }
 
     @Post()
-    @RolesAllowed(UserRole.USER)
     @UsePipes(createPipe)
-    @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
     @ApiBody({ type: createDto })
+    @RolesAllowed(UserRole.ADMIN)
     async create(@Body() body: C): Promise<T> {
       return this.service.create(body);
     }
 
     @Put(':id')
-    @RolesAllowed(UserRole.ADMIN)
     @UsePipes(updatePipe)
-    @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
     @ApiBody({ type: updateDto })
+    @RolesAllowed(UserRole.ADMIN)
     update(@Param() params: IDDto, @Body() body: U): Promise<T> {
       return this.service.update(params.id, body);
     }
 
     @Delete(':id')
     @RolesAllowed(UserRole.ADMIN)
-    @UseFilters(new RestApiExceptionFilter(), new TypeOrmExceptionFilter())
     delete(@Param() params: IDDto): Promise<void> {
       return this.service.delete(params.id);
     }

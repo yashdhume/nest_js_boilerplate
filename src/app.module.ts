@@ -3,7 +3,6 @@ import { AppController } from '@server/app.controller';
 import { DbModule } from '@server/db/db.module';
 import { AppLoggerMiddleware } from '@server/app.logger.middleware';
 import { UserModule } from 'src/user/user/user.module';
-import { AddressModule } from 'src/user/address/address.module';
 import { AuthModule } from '@server/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import envConfig from '@server/config/env/env.config';
@@ -17,7 +16,6 @@ import envConfig from '@server/config/env/env.config';
     DbModule,
     AuthModule,
     UserModule,
-    AddressModule,
   ],
   controllers: [AppController],
 })

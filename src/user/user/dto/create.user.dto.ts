@@ -11,6 +11,8 @@ import { Gender } from '@server/user/enums/gender.enum';
 import { Transform, Type } from 'class-transformer';
 import { CreateAddressDTO } from '@server/user/address/dto/create.address.dto';
 import { AddressEntity } from '@server/user/address/address.entity';
+import { CreateNotificationTokenDto } from '@server/user/notification_token/dto/create.notification-token.dto';
+import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'Y0hYEkX9S3UDGoD4l961LxosZFj2' })
@@ -39,4 +41,10 @@ export class CreateUserDto {
   @IsArray()
   @ValidateNested({ each: true })
   address: AddressEntity[];
+
+  @ApiProperty({ type: CreateNotificationTokenDto, isArray: true })
+  @Type(() => CreateNotificationTokenDto)
+  @IsArray()
+  @ValidateNested({ each: true })
+  notificationTokens: NotificationTokenEntity[];
 }

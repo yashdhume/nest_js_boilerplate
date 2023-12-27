@@ -22,11 +22,11 @@ export class AddressEntity extends BaseEntity {
   country!: string;
 
   @ApiProperty({ description: 'The postal code' })
-  @Column({ type: 'varchar', name: 'postal_code', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   postalCode?: string;
 
   @ApiHideProperty()
   @ManyToOne(() => UserEntity, user => user.address)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user' })
   user: UserEntity;
 }

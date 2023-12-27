@@ -4,6 +4,7 @@ import { AddressEntity } from '@server/user/address/address.entity';
 import { Gender } from '@server/user/enums/gender.enum';
 import { BaseEntity } from '@server/common/base/base.entity';
 import { UserRole } from '@server/auth/enums/user-role.enum';
+import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -24,7 +25,7 @@ export class UserEntity extends BaseEntity {
   role: number;
 
   @ApiProperty({ example: 'Oct 17 1997' })
-  @Column({ type: 'timestamptz', name: 'date_of_birth' })
+  @Column({ type: 'timestamptz' })
   dateOfBirth!: Date;
 
   @ApiProperty({ description: 'Male, Female etc. ' })
@@ -38,4 +39,16 @@ export class UserEntity extends BaseEntity {
   })
   @JoinColumn()
   address: AddressEntity[];
+
+  @ApiProperty({ example: { deviceToken: 'id', fcmToken: 'id' } })
+  @OneToMany(
+    () => NotificationTokenEntity,
+    notificationToken => notificationToken.user,
+    {
+      eager: true,
+      cascade: true,
+    },
+  )
+  @JoinColumn()
+  notificationTokens: NotificationTokenEntity[];
 }

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   BaseEntity as TypeOrmBaseEntity,
   CreateDateColumn,
@@ -13,17 +13,19 @@ export class BaseEntity extends TypeOrmBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: '2023-06-24T07:23:53.000Z' })
+  @ApiHideProperty()
   @CreateDateColumn()
   createdAt: Date;
 
-  @ApiProperty({ example: '2023-06-24T07:23:53.000Z' })
+  @ApiHideProperty()
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @ApiHideProperty()
   @VersionColumn()
   version: number;
 
+  @ApiHideProperty()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

@@ -14,8 +14,11 @@ export class CrudService<T> implements ICrudService<T> {
     this.notFoundErrorMsg = this.className + ' ' + Strings.notFound;
   }
 
-  async findOne(id: string): Promise<T> {
-    const data = await this.repo.findOne(<T>{ where: { id: id } });
+  async findOne(id: string, relations?: string[]): Promise<T> {
+    const data = await this.repo.findOne(<T>{
+      where: { id: id },
+      relations,
+    });
     if (data == null) throw new BadRequestException(this.notFoundErrorMsg);
     return data;
   }
