@@ -11,11 +11,11 @@ import { Gender } from '@server/user/enums/gender.enum';
 import { Transform, Type } from 'class-transformer';
 import { CreateAddressDTO } from '@server/user/address/dto/create.address.dto';
 import { AddressEntity } from '@server/user/address/address.entity';
-import { CreateNotificationTokenDto } from '@server/user/notification_token/dto/create.notification-token.dto';
-import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
+import { CreateUserDeviceDto } from '@server/user/user_device/dto/create.user-device.dto';
+import { UserDeviceEntity } from '@server/user/user_device/user-device.entity';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'Y0hYEkX9S3UDGoD4l961LxosZFj2' })
+  @ApiProperty({ example: 'Y0hYEkX9S3UDGoD4l961LxOsZFj2' })
   @IsString()
   firebaseUID!: string;
 
@@ -31,7 +31,7 @@ export class CreateUserDto {
   @IsDateString()
   dateOfBirth!: Date;
 
-  @ApiProperty({ description: 'Male, Female etc. ' })
+  @ApiProperty({ description: 'Male, Female etc. ', example: 'MALE' })
   @Transform(({ value }) => ('' + value).toUpperCase())
   @IsEnum(Gender)
   gender!: Gender;
@@ -42,9 +42,9 @@ export class CreateUserDto {
   @ValidateNested({ each: true })
   address: AddressEntity[];
 
-  @ApiProperty({ type: CreateNotificationTokenDto, isArray: true })
-  @Type(() => CreateNotificationTokenDto)
+  @ApiProperty({ type: CreateUserDeviceDto, isArray: true })
+  @Type(() => CreateUserDeviceDto)
   @IsArray()
   @ValidateNested({ each: true })
-  notificationTokens: NotificationTokenEntity[];
+  notificationTokens: UserDeviceEntity[];
 }

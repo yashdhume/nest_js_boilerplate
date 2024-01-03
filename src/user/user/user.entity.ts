@@ -4,7 +4,7 @@ import { AddressEntity } from '@server/user/address/address.entity';
 import { Gender } from '@server/user/enums/gender.enum';
 import { BaseEntity } from '@server/common/base/base.entity';
 import { UserRole } from '@server/auth/enums/user-role.enum';
-import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
+import { UserDeviceEntity } from '@server/user/user_device/user-device.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -41,14 +41,10 @@ export class UserEntity extends BaseEntity {
   address: AddressEntity[];
 
   @ApiProperty({ example: { deviceToken: 'id', fcmToken: 'id' } })
-  @OneToMany(
-    () => NotificationTokenEntity,
-    notificationToken => notificationToken.user,
-    {
-      eager: true,
-      cascade: true,
-    },
-  )
+  @OneToMany(() => UserDeviceEntity, userDevice => userDevice.user, {
+    eager: true,
+    cascade: true,
+  })
   @JoinColumn()
-  notificationTokens: NotificationTokenEntity[];
+  userDevices: UserDeviceEntity[];
 }

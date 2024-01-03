@@ -8,34 +8,34 @@ import {
 } from '@nestjs/common';
 import { ControllerFactory } from '@server/common/base/crud.controller';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { NotificationTokenService } from '@server/user/notification_token/notification-token.service';
-import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
 import { UserEntity } from '@server/user/user/user.entity';
 import { CurrentUser } from '@server/user/user/decorators/current-user.decorator';
-import { CreateNotificationTokenDto } from '@server/user/notification_token/dto/create.notification-token.dto';
-import { UpdateNotificationTokenDto } from '@server/user/notification_token/dto/update.notification-token.dto';
 import { UserRole } from '@server/auth/enums/user-role.enum';
 import { RolesAllowed } from '@server/auth/decorators/roles.decorator';
 import { IDDto } from '@server/common/base/ID.dto';
 import { SuccessResponse } from '@server/common/response/success.response';
+import { CreateUserDeviceDto } from '@server/user/user_device/dto/create.user-device.dto';
+import { UserDeviceEntity } from '@server/user/user_device/user-device.entity';
+import { UpdateUserDeviceDto } from '@server/user/user_device/dto/update.user-device.dto';
+import { UserDeviceService } from '@server/user/user_device/user-device.service';
 
-@ApiTags('Notification Token')
-@Controller('notification-token')
-export class NotificationTokenController extends ControllerFactory<
-  NotificationTokenEntity,
-  CreateNotificationTokenDto,
-  UpdateNotificationTokenDto
->(CreateNotificationTokenDto, UpdateNotificationTokenDto) {
-  constructor(protected service: NotificationTokenService) {
+@ApiTags('User Device')
+@Controller('user-device')
+export class UserDeviceController extends ControllerFactory<
+  UserDeviceEntity,
+  CreateUserDeviceDto,
+  UpdateUserDeviceDto
+>(CreateUserDeviceDto, UpdateUserDeviceDto) {
+  constructor(protected service: UserDeviceService) {
     super(service);
   }
   @Post('update')
   @RolesAllowed(UserRole.USER)
-  @ApiBody({ type: UpdateNotificationTokenDto })
+  @ApiBody({ type: UpdateUserDeviceDto })
   async updateNotification(
     @CurrentUser() currentUser: UserEntity,
-    @Body() body: UpdateNotificationTokenDto,
-  ): Promise<NotificationTokenEntity> {
+    @Body() body: UpdateUserDeviceDto,
+  ): Promise<UserDeviceEntity> {
     return this.service.updateTokenData(currentUser, body);
   }
   async delete(): Promise<undefined> {

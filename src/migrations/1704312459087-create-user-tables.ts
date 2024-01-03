@@ -1,11 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateUserTables1703715500896 implements MigrationInterface {
-  name = 'CreateUserTables1703715500896';
+export class CreateUserTables1704312459087 implements MigrationInterface {
+  name = 'CreateUserTables1704312459087';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "notification_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "version" integer NOT NULL, "deletedAt" TIMESTAMP, "deviceId" character varying NOT NULL, "fcmToken" character varying NOT NULL, "user" uuid, CONSTRAINT "PK_99cf05a96c3aaf7dfd10b5740d0" PRIMARY KEY ("id"))`,
+      `CREATE TYPE "public"."user_device_os_enum" AS ENUM('IOS', 'ANDROID')`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "user_device" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "version" integer NOT NULL, "deletedAt" TIMESTAMP, "os" "public"."user_device_os_enum" NOT NULL, "model" character varying NOT NULL, "deviceId" character varying NOT NULL, "fcmToken" character varying NOT NULL, "user" uuid, CONSTRAINT "PK_0232591a0b48e1eb92f3ec5d0d1" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."user_role_enum" AS ENUM('1', '2', '3')`,
@@ -20,7 +23,7 @@ export class CreateUserTables1703715500896 implements MigrationInterface {
       `CREATE TABLE "address" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "version" integer NOT NULL, "deletedAt" TIMESTAMP, "city" character varying NOT NULL, "district" character varying, "province" character varying NOT NULL, "country" character varying NOT NULL, "postalCode" character varying, "user" uuid, CONSTRAINT "PK_d92de1f82754668b5f5f5dd4fd5" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `ALTER TABLE "notification_token" ADD CONSTRAINT "FK_34f2ca9503d527ccc3446593564" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "user_device" ADD CONSTRAINT "FK_c0f33f9e8beee68a6ca4d86b5cd" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "address" ADD CONSTRAINT "FK_ba16b7fcf16a986fcfdc67d74e2" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
@@ -32,12 +35,13 @@ export class CreateUserTables1703715500896 implements MigrationInterface {
       `ALTER TABLE "address" DROP CONSTRAINT "FK_ba16b7fcf16a986fcfdc67d74e2"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "notification_token" DROP CONSTRAINT "FK_34f2ca9503d527ccc3446593564"`,
+      `ALTER TABLE "user_device" DROP CONSTRAINT "FK_c0f33f9e8beee68a6ca4d86b5cd"`,
     );
     await queryRunner.query(`DROP TABLE "address"`);
     await queryRunner.query(`DROP TABLE "user"`);
     await queryRunner.query(`DROP TYPE "public"."user_gender_enum"`);
     await queryRunner.query(`DROP TYPE "public"."user_role_enum"`);
-    await queryRunner.query(`DROP TABLE "notification_token"`);
+    await queryRunner.query(`DROP TABLE "user_device"`);
+    await queryRunner.query(`DROP TYPE "public"."user_device_os_enum"`);
   }
 }

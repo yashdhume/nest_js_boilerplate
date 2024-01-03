@@ -4,13 +4,13 @@ import { AddressModule } from '@server/user/address/address.module';
 import { UserService } from '@server/user/user/user.service';
 import { UserController } from '@server/user/user/user.controller';
 import { UserEntity } from '@server/user/user/user.entity';
-import { NotificationTokenModule } from '@server/user/notification_token/notification-token.module';
+import { UserDeviceModule } from '@server/user/user_device/user-device.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     AddressModule,
-    NotificationTokenModule,
+    UserDeviceModule,
   ],
   controllers: [UserController],
   providers: [UserService],

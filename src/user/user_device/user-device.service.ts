@@ -2,27 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { CrudService } from '@server/common/base/crud.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotificationTokenEntity } from '@server/user/notification_token/notification-token.entity';
-import { UpdateNotificationTokenDto } from '@server/user/notification_token/dto/update.notification-token.dto';
 import { UserEntity } from '@server/user/user/user.entity';
+import { UserDeviceEntity } from '@server/user/user_device/user-device.entity';
+import { UpdateUserDeviceDto } from '@server/user/user_device/dto/update.user-device.dto';
 
 @Injectable()
-export class NotificationTokenService extends CrudService<NotificationTokenEntity> {
+export class UserDeviceService extends CrudService<UserDeviceEntity> {
   constructor(
-    @InjectRepository(NotificationTokenEntity)
-    protected readonly repo: Repository<NotificationTokenEntity>,
+    @InjectRepository(UserDeviceEntity)
+    protected readonly repo: Repository<UserDeviceEntity>,
   ) {
     super(repo, 'Notification Token');
   }
-  findByUserId(id: string): Promise<NotificationTokenEntity[]> {
+  findByUserId(id: string): Promise<UserDeviceEntity[]> {
     return this.repo.find({
       where: { user: { id } },
     });
   }
   async updateTokenData(
     currentUser: UserEntity,
-    data: UpdateNotificationTokenDto,
-  ): Promise<NotificationTokenEntity> {
+    data: UpdateUserDeviceDto,
+  ): Promise<UserDeviceEntity> {
     const tokens = await this.findByUserId(currentUser.id);
     const byDeviceId = tokens.find(e => e.deviceId === data.deviceId);
     if (byDeviceId) {
@@ -39,6 +39,8 @@ export class NotificationTokenService extends CrudService<NotificationTokenEntit
     return this.create({
       deviceId: data.deviceId,
       fcmToken: data.fcmToken,
+      os: data.os,
+      model: data.model,
       user: currentUser,
     });
   }
