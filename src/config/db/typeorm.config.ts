@@ -13,6 +13,6 @@ export default {
   synchronize: false,
   entities: ['dist/**/*.entity.js'],
   migrationsTableName: 'migration',
-  migrations: ['dist/migrations/*.js'],
+  migrations: ['dist/db/migrations/*.js'],
   logger: 'advanced-console',
 };

@@ -50,7 +50,7 @@ $ yarn test:cov
 
 ```bash
 # Generate migration
-$ npx typeorm migration:generate src/migrations/<NAME OF MIGRATION> -d dist/db/typeorm.datasource.js 
+$ npx typeorm migration:generate src/db/migrations/<NAME OF MIGRATION> -d dist/db/typeorm.datasource.js 
 
 # Show Pending Migrations
 $ yarn db:migration:show
