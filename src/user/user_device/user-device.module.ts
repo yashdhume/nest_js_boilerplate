@@ -8,5 +8,6 @@ import { UserDeviceController } from '@server/user/user_device/user-device.contr
   imports: [TypeOrmModule.forFeature([UserDeviceEntity])],
   providers: [UserDeviceService],
   controllers: [UserDeviceController],
+  exports: [UserDeviceService],
 })
 export class UserDeviceModule {}

@@ -6,6 +6,8 @@ import { UserModule } from 'src/user/user/user.module';
 import { AuthModule } from '@server/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import envConfig from '@server/config/env/env.config';
+import { NotificationModule } from '@server/notification/notification.module';
+import { NotificationChannelModule } from './notification/channel/notification_channel.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import envConfig from '@server/config/env/env.config';
     DbModule,
     AuthModule,
     UserModule,
+    NotificationModule,
+    NotificationChannelModule,
   ],
   controllers: [AppController],
 })

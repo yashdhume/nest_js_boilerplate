@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '@server/user/user/user.entity';
 import { UserDeviceEntity } from '@server/user/user_device/user-device.entity';
 import { UpdateUserDeviceDto } from '@server/user/user_device/dto/update.user-device.dto';
+import { UserRole } from '@server/auth/enums/user-role.enum';
 
 @Injectable()
 export class UserDeviceService extends CrudService<UserDeviceEntity> {
@@ -17,6 +18,16 @@ export class UserDeviceService extends CrudService<UserDeviceEntity> {
   findByUserId(id: string): Promise<UserDeviceEntity[]> {
     return this.repo.find({
       where: { user: { id } },
+    });
+  }
+  findByRole(role: UserRole): Promise<UserDeviceEntity[]> {
+    return this.repo.find({
+      where: { user: { role } },
+    });
+  }
+  findByUserIdAndRole(id: string, role: UserRole): Promise<UserDeviceEntity[]> {
+    return this.repo.find({
+      where: { user: { id, role } },
     });
   }
   async updateTokenData(
